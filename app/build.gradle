@@ -21,10 +21,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':core')
     implementation libraries.appCompat
     implementation libraries.recyclerview
     implementation libraries.design
@@ -53,6 +57,9 @@ dependencies {
     androidTestImplementation (libraries.expressoCore , {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
+    testImplementation 'org.amshove.kluent:kluent:1.14'
+    testImplementation 'com.github.luciofm:mockwebserver:852ce0b657'
 }
 
 repositories {
