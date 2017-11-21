@@ -4,9 +4,9 @@ class LoginPresenter(val userRepository: UserRepository, val view: LoginView) {
 
     fun login(username: String, password: String) {
         userRepository.getByUsernameAndPassword(username, password, {
-            user ->
+            user -> view.onLoggedIn(user)
         }, {
-            error ->
+            error -> view.showError(error)
         })
     }
 }

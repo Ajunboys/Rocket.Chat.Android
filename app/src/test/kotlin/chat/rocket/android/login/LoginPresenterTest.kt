@@ -1,19 +1,17 @@
 package chat.rocket.android.login
 
 import chat.rocket.common.model.User
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.only
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
-
 
 class LoginPresenterTest {
 
     private val userRepository: UserRepository = mock()
     private val loginView: LoginView = mock()
-    private val successCallback: (User) -> Unit = mock()
-    private val errorCallback: (String) -> Unit = mock()
+    private val user: User = mock()
+    private val success = argumentCaptor<(User) -> Unit>()
+    private val failure = argumentCaptor<(String) -> Unit>()
     private lateinit var presenter: LoginPresenter
 
     @Before
@@ -23,12 +21,27 @@ class LoginPresenterTest {
 
     @Test
     fun `login with wrong username and password should show error`() {
+        whenever(userRepository.getByUsernameAndPassword(any(), any(),
+                success.capture(), failure.capture()))
+                .then { failure.firstValue.invoke("Unauthorized") }
+
         presenter.login("wrongUser", "wrongPass")
+
         verify(userRepository, only())
-                .getByUsernameAndPassword("wrongUser",
-                        "wrongPass",
-                        successCallback,
-                        errorCallback)
+                .getByUsernameAndPassword(any(), any(), any(), any())
         verify(loginView, only()).showError("Unauthorized")
+    }
+
+    @Test
+    fun `login with valid username and password should call onLoggedIn`() {
+        whenever(userRepository.getByUsernameAndPassword(any(), any(),
+                success.capture(), failure.capture()))
+                .then { success.firstValue.invoke(user) }
+
+        presenter.login("validUser", "validPass")
+
+        verify(userRepository, only())
+                .getByUsernameAndPassword(any(), any(), any(), any())
+        verify(loginView, only()).onLoggedIn(user)
     }
 }
