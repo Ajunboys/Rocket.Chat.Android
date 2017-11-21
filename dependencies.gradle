@@ -6,7 +6,6 @@ ext {
         compileSdk        : 27,
         targetSdk         : 27,
         buildTools        : '27.0.0',
-        kotlin            : '1.1.60',
 
         // Main dependencies
         support           : '27.0.0',
@@ -28,7 +27,7 @@ ext {
     ]
 
     libraries = [
-        kotlin           : "org.jetbrains.kotlin:kotlin-stdlib-jre7:${versions.kotlin}",
+        kotlin           : "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version",
         appCompat        : "com.android.support:appcompat-v7:${versions.support}",
         annotations      : "com.android.support:support-annotations:${versions.support}",
         recyclerview     : "com.android.support:recyclerview-v7:${versions.support}",
