@@ -1,1 +1,3 @@
-include ':app'
+include ':app', 'common', 'core'
+project(':common').projectDir = new File('sdk/common')
+project(':core').projectDir = new File('sdk/core')
